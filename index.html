@@ -201,6 +201,7 @@
 
   <script>
     const posts = [
+      { id: 11, title: "മാട്രിമോണി തീരുമാനങ്ങളിൽ ശ്രദ്ധിക്കേണ്ട കാര്യങ്ങൾ", date: "02 Nov 2026", excerpt: "വിവാഹത്തെക്കുറിച്ച് ആലോചിക്കുന്ന യുവാക്കൾക്കും കുടുംബങ്ങൾക്കും: തയ്യാറെടുപ്പ്, സമ്മതം, സ്വകാര്യത, ചെലവ് എന്നിവയെക്കുറിച്ചുള്ള ചില ചോദ്യങ്ങൾ.", body: "A thoughtful guide to making marriage-related decisions without pressure or assumptions.", color: "#527c66", url: "middle-matri.html#middle-matri" },
       ["The gentle art of starting", "12 Sep 2024", "A small ritual for moving from a blank page to a first, imperfect sentence.", "Starting is less about courage and more about making the first step small enough to take.", "#4a8c7b"],
       ["Designing for a slower internet", "28 Aug 2024", "What the web feels like when we leave a little room for people to breathe.", "The internet does not have to demand every second of our attention. A slower, kinder web is still a useful web.", "#3d6f85"],
       ["Notes on making things useful", "04 Aug 2024", "A practical reminder that usefulness often begins with listening carefully.", "Good work starts with attention: listening to the real question underneath the brief, then making space for a clear answer.", "#8b7650"],
@@ -211,7 +212,9 @@
       ["A good place to begin again", "11 May 2024", "Some thoughts on returning to an old idea with kinder eyes.", "Beginning again is not starting over. It is bringing everything we learned into the next version.", "#75814f"],
       ["The texture of a thoughtful tool", "24 Apr 2024", "The details that turn a functional object into something you want to return to.", "The best tools disappear just enough to let the work take over, while still giving a gentle nudge when we need one.", "#9b695b"],
       ["Postcards from the everyday", "08 Apr 2024", "A tiny collection of observations from walks, waiting rooms, and windows.", "There is always something to notice. The ordinary is not a backdrop; it is where most of life happens.", "#4e7d82"]
-    ].map((post, index) => ({ id: index + 1, title: post[0], date: post[1], excerpt: post[2], body: post[3], color: post[4] }));
+    ].map((post, index) => Array.isArray(post)
+      ? ({ id: index + 1, title: post[0], date: post[1], excerpt: post[2], body: post[3], color: post[4] })
+      : post);
 
     const pageSize = 6;
     let page = 1;
@@ -242,7 +245,9 @@
             <div class="meta">${post.date}</div>
             <h2>${post.title}</h2>
             <p class="excerpt">${post.excerpt}</p>
-            <button class="read-more" onclick="openPost(${post.id})" aria-label="Read ${post.title}">Read note <span>→</span></button>
+            ${post.url
+              ? `<a class="read-more" href="${post.url}" aria-label="Read ${post.title}">Read note <span>→</span></a>`
+              : `<button class="read-more" onclick="openPost(${post.id})" aria-label="Read ${post.title}">Read note <span>→</span></button>`}
           </div>
         </article>`).join("") : `<div class="empty"><h2>No notes found</h2><p>Try a different search term.</p></div>`;
       pagination.innerHTML = pageCount > 1 ? `
